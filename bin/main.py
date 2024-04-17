@@ -83,19 +83,20 @@ if __name__ == "__main__":
     Obj = PyLidar3.YdLidarG4(args.device_port)
 
     if(Obj.Connect()):
-        print("DeviceInfo:",Obj.GetDeviceInfo())
-        print("HealtStatus:",Obj.GetHealthStatus())
-        print("CurrentFrequency:",Obj.GetCurrentFrequency())
-        print("CurrentRangingFrequency:",Obj.GetCurrentRangingFrequency())
+
+        logging.info("DeviceInfo:",Obj.GetDeviceInfo())
+        logging.info("HealtStatus:",Obj.GetHealthStatus())
+        logging.info("CurrentFrequency:",Obj.GetCurrentFrequency())
+        logging.info("CurrentRangingFrequency:",Obj.GetCurrentRangingFrequency())
 
         gen = Obj.StartScanning()
         t = time.time() # start time 
         
         while (time.time() - t) < 30: #scan for 30 seconds
-            print(next(gen)) #  angle(degrees) and distance(millimeters).
+            logging.debug(next(gen)) #  angle(degrees) and distance(millimeters).
             time.sleep(0.5)
         Obj.StopScanning()
         Obj.Disconnect()
 
     else:
-        print("Error connecting to device")
+        logging.error("Error connecting to device")
