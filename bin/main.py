@@ -80,7 +80,9 @@ if __name__ == "__main__":
     # YDLIDAR Connector 
     # -----------------------------
     logging.info(f"Conneting to device: {args.device_port}")
-    Obj = PyLidar3.YdLidarG4(args.device_port)
+    port = "/dev/ttyACM1" 
+    # Obj = PyLidar3.YdLidarG4(args.device_port)
+    Obj = PyLidar3.YdLidarG4(port)
     logging.info(f"Device connected: {Obj.Connect()}") 
 
     if(Obj.Connect()):
