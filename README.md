@@ -12,3 +12,10 @@ Supported and tested sensor types:
 [PyLidar3](https://github.com/lakshmanmallidi/PyLidar3)
 
 Output: Dictionry angle(degrees) and distance(millimeters) 
+
+## Run main.py start script examle
+
+```bash
+python bin/main.py -r rise -e boatswain --device-port /dev/ttyACM1 --log-level 10 
+```
+
