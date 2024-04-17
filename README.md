@@ -10,3 +10,5 @@ Supported and tested sensor types:
 ## Python SDK
 
 [PyLidar3](https://github.com/lakshmanmallidi/PyLidar3)
+
+Output: Dictionry angle(degrees) and distance(millimeters) 
