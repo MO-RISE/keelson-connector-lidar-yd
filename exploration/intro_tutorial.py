@@ -1,6 +1,6 @@
 import PyLidar3
 
-port = input("Enter port name which lidar is connected:") #windows
+port = "/dev/ttyACM1" 
 
 Obj = PyLidar3.YdLidarG4(port)
 
