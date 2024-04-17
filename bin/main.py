@@ -15,7 +15,7 @@ from terminal_inputs import terminal_inputs
 
 from keelson.payloads.TimestampedFloat_pb2 import TimestampedFloat
 from keelson.payloads.TimestampedString_pb2 import TimestampedString
-
+from keelson.payloads.LaserScan_pb2 import LaserScan
 # Global variable for Zenoh session
 session = None
 
@@ -96,7 +96,39 @@ if __name__ == "__main__":
         t = time.time() # start time 
         
         while (time.time() - t) < 30: #scan for 30 seconds
-            logging.debug(next(gen)) #  angle(degrees) and distance(millimeters).
+            ingress_timestamp = time.time_ns()
+            scan_360 = next(gen) # Dict, {angle(degrees) : distance(millimeters), ...}
+
+            payload = LaserScan()
+            payload.timestamp.FromNanoseconds(ingress_timestamp)
+            payload.start_angle = 0 # Bearing of first point, in radians
+            payload.start_angle = 6.28319 # Bearing of last point, in radians
+            # Distance of detections from origin; assumed to be at equally-spaced angles between `start_angle` and `end_angle`
+            payload.ranges = scan_360.values()  
+
+            # POSE ???? 
+
+            # Zero relative position
+            payload.pose.position.x = 0
+            payload.pose.position.y = 0
+            payload.pose.position.z = 0
+
+            # Identity quaternion
+            payload.pose.rotation.x = 0
+            payload.pose.rotation.y = 0
+            payload.pose.rotation.z = 0
+            payload.pose.rotation.w = 1
+
+            # Fields are in float64 (8 bytes each)
+            payload.fields.add(name="x", offset=0, type=8)
+            payload.fields.add(name="y", offset=8, type=8)
+            payload.fields.add(name="z", offset=16, type=8)
+
+            serialized_payload = payload.SerializeToString()
+            envelope = keelson.enclose(serialized_payload)
+            pubkey_scan.put(envelope)
+
+            logging.debug() 
             time.sleep(0.5)
         Obj.StopScanning()
         Obj.Disconnect()
