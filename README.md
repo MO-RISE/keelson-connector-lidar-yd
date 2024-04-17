@@ -19,3 +19,9 @@ Output: Dictionry angle(degrees) and distance(millimeters)
 python bin/main.py -r rise -e boatswain --device-port /dev/ttyACM1 --log-level 10 
 ```
 
+## Truble shooting / Lessons learned  
+
+```bash
+# If you do not have access rights to read devise 
+sudo chmod a+rw /dev/ttyACM1
+```
