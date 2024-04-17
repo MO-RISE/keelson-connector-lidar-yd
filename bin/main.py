@@ -129,7 +129,7 @@ if __name__ == "__main__":
 
             serialized_payload = payload.SerializeToString()
             envelope = keelson.enclose(serialized_payload)
-            pubkey_scan.put(envelope)
+            pub_scan.put(envelope)
 
             
             time.sleep(0.5)
