@@ -99,12 +99,14 @@ if __name__ == "__main__":
             ingress_timestamp = time.time_ns()
             scan_360 = next(gen) # Dict, {angle(degrees) : distance(millimeters), ...}
             logging.debug(f"scan_360: {scan_360}") 
+            logging.debug(f"scan_360: {type(scan_360)}") 
             payload = LaserScan()
             payload.timestamp.FromNanoseconds(ingress_timestamp)
             payload.start_angle = 0 # Bearing of first point, in radians
             payload.start_angle = 6.28319 # Bearing of last point, in radians
             # Distance of detections from origin; assumed to be at equally-spaced angles between `start_angle` and `end_angle`
-            payload.ranges = scan_360.values()  
+            payload.ranges = [1,2,3.4]  
+            ranges = scan_360.values()     
 
             # POSE ???? 
 
