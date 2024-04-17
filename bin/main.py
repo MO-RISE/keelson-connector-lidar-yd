@@ -98,7 +98,7 @@ if __name__ == "__main__":
         while (time.time() - t) < 30: #scan for 30 seconds
             ingress_timestamp = time.time_ns()
             scan_360 = next(gen) # Dict, {angle(degrees) : distance(millimeters), ...}
-
+            logging.debug(f"scan_360: {scan_360}") 
             payload = LaserScan()
             payload.timestamp.FromNanoseconds(ingress_timestamp)
             payload.start_angle = 0 # Bearing of first point, in radians
@@ -128,7 +128,7 @@ if __name__ == "__main__":
             envelope = keelson.enclose(serialized_payload)
             pubkey_scan.put(envelope)
 
-            logging.debug() 
+            
             time.sleep(0.5)
         Obj.StopScanning()
         Obj.Disconnect()
