@@ -112,20 +112,20 @@ if __name__ == "__main__":
             # POSE ???? 
 
             # Zero relative position
-            payload.pose.position.x = 0
-            payload.pose.position.y = 0
-            payload.pose.position.z = 0
+            # payload.pose.position.x = 0
+            # payload.pose.position.y = 0
+            # payload.pose.position.z = 0
 
             # Identity quaternion
-            payload.pose.rotation.x = 0
-            payload.pose.rotation.y = 0
-            payload.pose.rotation.z = 0
-            payload.pose.rotation.w = 1
+            # payload.pose.rotation.x = 0
+            # payload.pose.rotation.y = 0
+            # payload.pose.rotation.z = 0
+            # payload.pose.rotation.w = 1
 
             # Fields are in float64 (8 bytes each)
-            payload.fields.add(name="x", offset=0, type=8)
-            payload.fields.add(name="y", offset=8, type=8)
-            payload.fields.add(name="z", offset=16, type=8)
+            # payload.fields.add(name="x", offset=0, type=8)
+            # payload.fields.add(name="y", offset=8, type=8)
+            # payload.fields.add(name="z", offset=16, type=8)
 
             serialized_payload = payload.SerializeToString()
             envelope = keelson.enclose(serialized_payload)
