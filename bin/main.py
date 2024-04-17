@@ -81,8 +81,8 @@ if __name__ == "__main__":
     # -----------------------------
     logging.info(f"Conneting to device: {args.device_port}")
     Obj = PyLidar3.YdLidarG4(args.device_port)
-    logging.info(f"Device connected!")
-    
+    logging.info(f"Device connected: {Obj.Connect()}") 
+
     if(Obj.Connect()):
 
         logging.info("DeviceInfo:",Obj.GetDeviceInfo())
@@ -101,3 +101,5 @@ if __name__ == "__main__":
 
     else:
         logging.error("Error connecting to device")
+
+    logging.info(f"END OF SCRIPT") 
