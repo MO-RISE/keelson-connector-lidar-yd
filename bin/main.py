@@ -60,7 +60,7 @@ if __name__ == "__main__":
         source_id="ydlidar",
     )
     pub_scan = session.declare_publisher(pubkey_scan)
-    logging.info(f"Decler up TELEMETRY publisher: {pub_scan}")
+    logging.info(f"Decler up TELEMETRY publisher: {pubkey_scan}")
 
     # Point cloud publisher
     pubkey_point_cloud = keelson.construct_pub_sub_key(
@@ -70,7 +70,7 @@ if __name__ == "__main__":
         source_id="ydlidar",
     )
     pub_point_cloud = session.declare_publisher(pubkey_point_cloud)
-    logging.info(f"Decler up TELEMETRY publisher: {pub_point_cloud}")
+    logging.info(f"Decler up TELEMETRY publisher: {pubkey_point_cloud}")
 
     # -----------------------------
     # -----------------------------
