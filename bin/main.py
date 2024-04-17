@@ -106,7 +106,7 @@ if __name__ == "__main__":
             payload.start_angle = 6.28319 # Bearing of last point, in radians
             # Distance of detections from origin; assumed to be at equally-spaced angles between `start_angle` and `end_angle`
             ranges = scan_360.values()     
-            ranges_arr_float = [float(value) for value in scan_360.values()]
+            ranges_arr_float = [float(value) for value in ranges]
             payload.ranges = ranges_arr_float
 
             # POSE ???? 
