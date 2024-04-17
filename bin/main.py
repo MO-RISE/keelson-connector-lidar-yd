@@ -81,15 +81,16 @@ if __name__ == "__main__":
     # -----------------------------
     logging.info(f"Conneting to device: {args.device_port}")
     port = "/dev/ttyACM1" 
+    port = args.device_port
     # Obj = PyLidar3.YdLidarG4(args.device_port)
     Obj = PyLidar3.YdLidarG4(port)
 
     if(Obj.Connect()):
 
-        logging.info("DeviceInfo:",Obj.GetDeviceInfo())
-        logging.info("HealtStatus:",Obj.GetHealthStatus())
-        logging.info("CurrentFrequency:",Obj.GetCurrentFrequency())
-        logging.info("CurrentRangingFrequency:",Obj.GetCurrentRangingFrequency())
+        logging.info(f"DeviceInfo: {Obj.GetDeviceInfo()}")
+        logging.info(f"HealtStatus: {Obj.GetHealthStatus()}")
+        logging.info(f"CurrentFrequency: {Obj.GetCurrentFrequency()}")
+        logging.info(f"CurrentRangingFrequency:{Obj.GetCurrentRangingFrequency()}")
 
         gen = Obj.StartScanning()
         t = time.time() # start time 
