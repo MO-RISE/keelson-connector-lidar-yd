@@ -103,7 +103,7 @@ if __name__ == "__main__":
             payload = LaserScan()
             payload.timestamp.FromNanoseconds(ingress_timestamp)
             payload.start_angle = 0 # Bearing of first point, in radians
-            payload.start_angle = 6.28319 # Bearing of last point, in radians
+            payload.start_angle = 6.26573 # Bearing of last point, in radians
             # Distance of detections from origin; assumed to be at equally-spaced angles between `start_angle` and `end_angle`
             ranges = scan_360.values()     
             ranges_arr_float = [float(value) for value in ranges]
@@ -112,9 +112,9 @@ if __name__ == "__main__":
             # POSE ???? 
 
             # Zero relative position
-            # payload.pose.position.x = 0
-            # payload.pose.position.y = 0
-            # payload.pose.position.z = 0
+            payload.pose.position.x = 0
+            payload.pose.position.y = 0
+            payload.pose.position.z = 0
 
             # Identity quaternion
             # payload.pose.rotation.x = 0

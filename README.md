@@ -27,3 +27,4 @@ sudo chmod a+rw /dev/ttyACM1
 ```
 
 https://github.com/YDLIDAR/YDLidar-SDK/blob/master/doc/YDLIDAR_SDK_API_for_Developers.md 
+
