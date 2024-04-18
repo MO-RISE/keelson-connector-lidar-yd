@@ -1,6 +1,7 @@
 import os
 import ydlidar
 import time
+import math
 
 if __name__ == "__main__":
     ydlidar.os_init()
@@ -39,6 +40,14 @@ if __name__ == "__main__":
                     readings.append([point.angle, point.range])
                 print(readings)
                 print(len(readings))
+
+                relative_positions = []
+                for point in scan.points:
+                    angle_rad = math.radians(point.angle)
+                    x = point.range * math.cos(angle_rad)
+                    y = point.range * math.sin(angle_rad)
+                    relative_positions.append([x, y])
+                print(relative_positions)
            
             else :
                 print("Failed to get Lidar Data")
