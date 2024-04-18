@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
                 readings = [] 
                 for point in scan.points:
-                    readings.append([point.angle, point.range, point.intensity])
+                    readings.append([point.angle, point.range])
                 print(readings)
             else :
                 print("Failed to get Lidar Data")
@@ -44,6 +44,8 @@ if __name__ == "__main__":
         laser.turnOff()
     laser.disconnecting()
 
+# Start: -0.338975727558136,
 
+# End: -0.3430665135383606
 
 
