@@ -38,7 +38,7 @@ if __name__ == "__main__":
                 for point in scan.points:
                     readings.append([point.angle, point.range])
                 print(readings)
-                print(readings.lenght)
+                print(readings.length)
             else :
                 print("Failed to get Lidar Data")
             time.sleep(0.05)
