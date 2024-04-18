@@ -32,6 +32,7 @@ if __name__ == "__main__":
             r = laser.doProcessSimple(scan)
             if r:
                 print(f"Scan received[{scan.stamp}]:{scan.points.size()} ranges is [{scan.config.scan_time}]Hz")
+                print(f"Scan received points:{scan.points}")
             else :
                 print("Failed to get Lidar Data")
             time.sleep(0.05);
