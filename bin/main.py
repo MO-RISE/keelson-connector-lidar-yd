@@ -147,17 +147,20 @@ if __name__ == "__main__":
                     #     logging.debug(f"Point: {point.angle, point.range}")
 
                 # logging.debug(relative_positions)
+                
                 logging.debug(f"Points: {len(relative_positions)}")
+            
+                np_relative_pos = np.array(relative_positions)
 
+                data = np_relative_pos.tobytes()
+                point_stride = len(data) / len(np_relative_pos)
+                
                 payload = PointCloud()
 
                 # data = relative_positions.tobytes() ERROR 
                 # Convert relative_positions to bytes
-                np_relative_pos = np.array(relative_positions)
-                data = np_relative_pos.tobytes()
                 # data = b"".join(struct.pack("dd", x, y) for x, y, _ in relative_positions)
                 
-                point_stride = len(data) / len(relative_positions)
 
                 logging.debug("Point stride: %s", point_stride)
                 payload.point_stride = int(point_stride)
@@ -169,14 +172,17 @@ if __name__ == "__main__":
                 payload.pose.position.x = 0
                 payload.pose.position.y = 0
                 payload.pose.position.z = 0
-                # payload.pose.rotation.x = 0 ERROR 
-                # payload.pose.rotation.y = 0
-                # payload.pose.rotation.z = 0
-                # payload.pose.rotation.w = 1
-                            # Fields are in float64 (8 bytes each)
+
+                payload.pose.rotation.x = 0 # ERROR 
+                payload.pose.rotation.y = 0
+                payload.pose.rotation.z = 0
+                payload.pose.rotation.w = 1
+
+                # Fields are in float64 (8 bytes each)
                 payload.fields.add(name="x", offset=0, type=8)
                 payload.fields.add(name="y", offset=8, type=8)
                 payload.fields.add(name="z", offset=16, type=8)
+
                 serialized_payload = payload.SerializeToString()
 
                 logging.debug("...serialized.")
