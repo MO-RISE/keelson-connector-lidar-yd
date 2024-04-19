@@ -41,6 +41,13 @@ def terminal_inputs():
         default="/dev/ydlidar",
         help="Device connection PORT deafult /dev/ydlidar else Ex. Linux: /dev/ttyACM0 or Windows: COM3",
     )
+    parser.add_argument(
+        "-fid",
+        "--frame-id",
+        type=str,
+        default="ydlidar",
+        help="Frame ID for the sensor data, default ydlidar",
+    )
 
     ## Parse arguments and start doing our thing
     args = parser.parse_args()

@@ -183,6 +183,9 @@ if __name__ == "__main__":
                 payload.fields.add(name="y", offset=8, type=8)
                 payload.fields.add(name="z", offset=16, type=8)
 
+                if args.frame_id is not None:
+                    payload.frame_id = args.frame_id
+
                 serialized_payload = payload.SerializeToString()
 
                 logging.debug("...serialized.")
