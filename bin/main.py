@@ -12,6 +12,7 @@ import time
 import keelson
 import ydlidar
 import math
+import numpy as np
 
 from terminal_inputs import terminal_inputs
 
