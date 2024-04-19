@@ -1,5 +1,6 @@
 """
-Script for connecting YDlidar to Keelson.
+Script for connecting YDlidar to Keelson
+-----------------------------------------
 """
 
 import zenoh

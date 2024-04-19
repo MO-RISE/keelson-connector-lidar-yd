@@ -38,8 +38,8 @@ def terminal_inputs():
         "-dp",
         "--device-port",
         type=str,
-        required=True,
-        help="Device connection PORT string for Ex. Linux: /dev/ttyACM0 or Windows: COM3",
+        default="/dev/ydlidar",
+        help="Device connection PORT deafult /dev/ydlidar else Ex. Linux: /dev/ttyACM0 or Windows: COM3",
     )
 
     ## Parse arguments and start doing our thing
