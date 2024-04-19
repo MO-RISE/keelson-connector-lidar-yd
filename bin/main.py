@@ -152,7 +152,9 @@ if __name__ == "__main__":
 
                 # data = relative_positions.tobytes() ERROR 
                 # Convert relative_positions to bytes
-                data = b"".join(struct.pack("dd", x, y) for x, y, _ in relative_positions)
+                np_relative_pos = np.array(relative_positions)
+                data = np_relative_pos.tobytes()
+                # data = b"".join(struct.pack("dd", x, y) for x, y, _ in relative_positions)
                 
                 point_stride = len(data) / len(relative_positions)
 
