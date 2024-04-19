@@ -2,7 +2,11 @@
 
 Supported and tested sensor types:
 
-- G2 (Budrate: 230400 SampleRate: 5)
+- G4 (Budrate: 230400 SampleRate: 9/8/4)
+  - [Development Manual](https://www.ydlidar.com/Public/upload/files/2022-06-21/YDLIDAR%20G4%20Development%20Manual%20V1.8(220411).pdf)
+  - [User Manual](https://www.ydlidar.com/Public/upload/files/2022-06-21/YDLIDAR%20G4%20Lidar%20User%20Manual%20V1.3(220411).pdf)
+  - [Data Sheet](https://www.ydlidar.com/Public/upload/files/2022-06-21/YDLIDAR%20G4%20Data%20sheet%20V2.0(220411).pdf)
+- G2
   - [Development Manual](https://www.ydlidar.com/Public/upload/files/2022-07-25/YDLIDAR%20G2%20Development%20Manual%20V1.1(211230).pdf)
   - [User Manual](https://www.ydlidar.com/Public/upload/files/2022-06-21/YDLIDAR%20G2%20Lidar%20User%20Manual%20V1.3(211230).pdf)
   - [Data Sheet](https://www.ydlidar.com/Public/upload/files/2022-06-21/YDLIDAR%20G2%20Data%20Sheet%20V1.3(211230).pdf)
@@ -16,6 +20,10 @@ Output: Dictionry angle(degrees) and distance(millimeters)
 ## Run main.py start script examle
 
 ```bash
+# Simple 
+python bin/main.py -r rise -e boatswain --log-level 10 
+
+# Extended settings 
 python bin/main.py -r rise -e boatswain --device-port /dev/ttyACM1 --log-level 10 
 ```
 

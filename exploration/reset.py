@@ -9,6 +9,6 @@ if(Obj.Connect()):
     print("Resseted device")
     Obj.Disconnect()
 
-else:
+else: 
     print("Error connecting to device")
     Obj.Disconnect()

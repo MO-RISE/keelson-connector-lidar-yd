@@ -10,13 +10,16 @@ import atexit
 import json
 import time
 import keelson
-import PyLidar3
+import ydlidar
+import math
 
 from terminal_inputs import terminal_inputs
 
 from keelson.payloads.TimestampedFloat_pb2 import TimestampedFloat
 from keelson.payloads.TimestampedString_pb2 import TimestampedString
-from keelson.payloads.LaserScan_pb2 import LaserScan
+from keelson.payloads.PointCloud_pb2 import PointCloud
+import struct
+
 # Global variable for Zenoh session
 session = None
 
@@ -24,7 +27,7 @@ session = None
 Arguments / configurations are set in docker-compose.yml
 """
 if __name__ == "__main__":
-    
+
     # BASE SETUP and INITIALIZATION
     # -----------------------------
 
@@ -42,17 +45,18 @@ if __name__ == "__main__":
     if args.connect is not None:
         conf.insert_json5(zenoh.config.CONNECT_KEY, json.dumps(args.connect))
     session = zenoh.open(conf)
+
     def _on_exit():
         session.close()
+
     atexit.register(_on_exit)
     logging.info(f"Zenoh session: {session.info()}")
     # -----------------------------
     # -----------------------------
 
-
-    # INITIALIZATION PUBLISHERS 
+    # INITIALIZATION PUBLISHERS
     # -----------------------------
-    
+
     # Scan publisher
     pubkey_scan = keelson.construct_pub_sub_key(
         realm=args.realm,
@@ -76,68 +80,115 @@ if __name__ == "__main__":
     # -----------------------------
     # -----------------------------
 
-
-
-    # YDLIDAR Connector 
+    # YDLIDAR Connector
     # -----------------------------
     logging.info(f"Conneting to device: {args.device_port}")
-    port = "/dev/ttyACM1" 
+
+    ydlidar.os_init()
+    ports = ydlidar.lidarPortList()
     port = args.device_port
-    # Obj = PyLidar3.YdLidarG4(args.device_port)
-    Obj = PyLidar3.YdLidarG4(port)
 
-    if(Obj.Connect()):
+    for key, value in ports.items():
+        port = value
+        logging.info(f"Conneting to port: {port}")
 
-        logging.info(f"DeviceInfo: {Obj.GetDeviceInfo()}")
-        logging.info(f"HealtStatus: {Obj.GetHealthStatus()}")
-        logging.info(f"CurrentFrequency: {Obj.GetCurrentFrequency()}")
-        logging.info(f"CurrentRangingFrequency:{Obj.GetCurrentRangingFrequency()}")
+    laser = ydlidar.CYdLidar()
+    laser.setlidaropt(ydlidar.LidarPropSerialPort, port)
+    laser.setlidaropt(ydlidar.LidarPropSerialBaudrate, 230400)
+    laser.setlidaropt(ydlidar.LidarPropLidarType, ydlidar.TYPE_TRIANGLE)
+    laser.setlidaropt(ydlidar.LidarPropDeviceType, ydlidar.YDLIDAR_TYPE_SERIAL)
+    laser.setlidaropt(ydlidar.LidarPropScanFrequency, 12.0)
+    laser.setlidaropt(ydlidar.LidarPropSampleRate, 9)
+    laser.setlidaropt(ydlidar.LidarPropSingleChannel, False)
+    laser.setlidaropt(ydlidar.LidarPropMaxAngle, 180.0)
+    laser.setlidaropt(ydlidar.LidarPropMinAngle, -180.0)
+    laser.setlidaropt(ydlidar.LidarPropMaxRange, 16.0)
+    laser.setlidaropt(ydlidar.LidarPropMinRange, 0.1)
+    laser.setlidaropt(ydlidar.LidarPropIntenstiy, False)
 
-        gen = Obj.StartScanning()
-        t = time.time() # start time 
-        
-        while (time.time() - t) < 30: #scan for 30 seconds
-            ingress_timestamp = time.time_ns()
-            scan_360 = next(gen) # Dict, {angle(degrees) : distance(millimeters), ...}
-            logging.debug(f"scan_360: {scan_360}") 
-            logging.debug(f"scan_360: {type(scan_360)}") 
-            payload = LaserScan()
-            payload.timestamp.FromNanoseconds(ingress_timestamp)
-            payload.start_angle = 0 # Bearing of first point, in radians
-            payload.start_angle = 6.26573 # Bearing of last point, in radians
-            # Distance of detections from origin; assumed to be at equally-spaced angles between `start_angle` and `end_angle`
-            ranges = scan_360.values()     
-            ranges_arr_float = [float(value) for value in ranges]
-            payload.ranges.extend(ranges_arr_float) 
+    ret = laser.initialize()
 
-            # POSE ???? 
+    if ret:
+        ret = laser.turnOn()
+        scan = ydlidar.LaserScan()
 
-            # Zero relative position
-            payload.pose.position.x = 0
-            payload.pose.position.y = 0
-            payload.pose.position.z = 0
+        while ret and ydlidar.os_isOk():
 
-            # Identity quaternion
-            # payload.pose.rotation.x = 0
-            # payload.pose.rotation.y = 0
-            # payload.pose.rotation.z = 0
-            # payload.pose.rotation.w = 1
+            ret = laser.doProcessSimple(scan)
 
-            # Fields are in float64 (8 bytes each)
-            # payload.fields.add(name="x", offset=0, type=8)
-            # payload.fields.add(name="y", offset=8, type=8)
-            # payload.fields.add(name="z", offset=16, type=8)
+            if ret:
+                ingress_timestamp = time.time_ns()
 
-            serialized_payload = payload.SerializeToString()
-            envelope = keelson.enclose(serialized_payload)
-            pub_scan.put(envelope)
+                logging.debug(
+                    f"Scan received[{scan.stamp}]:{scan.points.size()} ranges is [{scan.config.scan_time*100}]Hz"
+                )
 
-            
-            time.sleep(0.5)
-        Obj.StopScanning()
-        Obj.Disconnect()
+                # logging.debug(f"Scan received points:{scan.points}")
 
-    else:
-        logging.error("Error connecting to device")
+                readings = []
+                for point in scan.points:
+                    readings.append([point.angle, point.range])
 
-    logging.info(f"END OF SCRIPT") 
+                # logging.debug(readings)
+                logging.debug(f"Readings: {len(readings)}")
+
+                relative_positions = []
+
+                for point in scan.points:
+
+                    x = point.range * math.cos(point.angle)
+                    y = point.range * math.sin(point.angle)
+                    
+                    if x > 0 or y > 0:
+                        relative_positions.append([x, y, 0])
+                    # else:
+                    #     logging.debug(f"Point Coord: {x, y}")
+                    #     logging.debug(f"Point: {point.angle, point.range}")
+
+                # logging.debug(relative_positions)
+                logging.debug(f"Points: {len(relative_positions)}")
+
+                payload = PointCloud()
+
+                # data = relative_positions.tobytes() ERROR 
+                # Convert relative_positions to bytes
+                data = b"".join(struct.pack("dd", x, y) for x, y, _ in relative_positions)
+                
+                point_stride = len(data) / len(relative_positions)
+
+                logging.debug("Point stride: %s", point_stride)
+                payload.point_stride = int(point_stride)
+
+                payload.data = data
+
+                payload.timestamp.FromNanoseconds(ingress_timestamp)
+                # POSE 
+                payload.pose.position.x = 0
+                payload.pose.position.y = 0
+                payload.pose.position.z = 0
+                # payload.pose.rotation.x = 0 ERROR 
+                # payload.pose.rotation.y = 0
+                # payload.pose.rotation.z = 0
+                # payload.pose.rotation.w = 1
+                            # Fields are in float64 (8 bytes each)
+                payload.fields.add(name="x", offset=0, type=8)
+                payload.fields.add(name="y", offset=8, type=8)
+                payload.fields.add(name="z", offset=16, type=8)
+                serialized_payload = payload.SerializeToString()
+
+                logging.debug("...serialized.")
+
+                envelope = keelson.enclose(serialized_payload)
+                # logging.debug("...enclosed into envelope, serialized as: %s", envelope)
+
+                pub_point_cloud.put(envelope)
+                logging.debug("...published to zenoh!")
+
+            else:
+                logging.debug("Failed to get Lidar Data")
+
+            time.sleep(0.05)
+        laser.turnOff()
+    laser.disconnecting()
+
+    logging.info(f"END OF SCRIPT")
