@@ -173,10 +173,10 @@ if __name__ == "__main__":
                 payload.pose.position.y = 0
                 payload.pose.position.z = 0
 
-                payload.pose.rotation.x = 0 # ERROR 
-                payload.pose.rotation.y = 0
-                payload.pose.rotation.z = 0
-                payload.pose.rotation.w = 1
+                payload.pose.Quaternion.x = 0.0 # ERROR 
+                payload.pose.Quaternion.y = 0.0
+                payload.pose.Quaternion.z = 0.0
+                payload.pose.Quaternion.w = 1.0
 
                 # Fields are in float64 (8 bytes each)
                 payload.fields.add(name="x", offset=0, type=8)
