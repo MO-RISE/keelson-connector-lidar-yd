@@ -108,6 +108,7 @@ if __name__ == "__main__":
         laser.setlidaropt(ydlidar.LidarPropMaxRange, 16.0)
         laser.setlidaropt(ydlidar.LidarPropMinRange, 0.1)
         laser.setlidaropt(ydlidar.LidarPropIntenstiy, False)
+        
         ret = laser.initialize()
         logging.info(f"HERE")
     except Exception as e:
