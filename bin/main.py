@@ -95,20 +95,20 @@ if __name__ == "__main__":
     laser = ydlidar.CYdLidar()
     logging.info(f"Conneted: {port}")
 
-    laser.setlidaropt(ydlidar.LidarPropSerialPort, port)
-    laser.setlidaropt(ydlidar.LidarPropSerialBaudrate, 230400)
-    laser.setlidaropt(ydlidar.LidarPropLidarType, ydlidar.TYPE_TRIANGLE)
-    laser.setlidaropt(ydlidar.LidarPropDeviceType, ydlidar.YDLIDAR_TYPE_SERIAL)
-    laser.setlidaropt(ydlidar.LidarPropScanFrequency, 12.0)
-    laser.setlidaropt(ydlidar.LidarPropSampleRate, 9)
-    laser.setlidaropt(ydlidar.LidarPropSingleChannel, False)
-    laser.setlidaropt(ydlidar.LidarPropMaxAngle, 180.0)
-    laser.setlidaropt(ydlidar.LidarPropMinAngle, -180.0)
-    laser.setlidaropt(ydlidar.LidarPropMaxRange, 16.0)
-    laser.setlidaropt(ydlidar.LidarPropMinRange, 0.1)
-    laser.setlidaropt(ydlidar.LidarPropIntenstiy, False)
-
     try:
+        laser.setlidaropt(ydlidar.LidarPropSerialPort, port)
+        laser.setlidaropt(ydlidar.LidarPropSerialBaudrate, 230400)
+        laser.setlidaropt(ydlidar.LidarPropLidarType, ydlidar.TYPE_TRIANGLE)
+        laser.setlidaropt(ydlidar.LidarPropDeviceType, ydlidar.YDLIDAR_TYPE_SERIAL)
+        laser.setlidaropt(ydlidar.LidarPropScanFrequency, 12.0)
+        laser.setlidaropt(ydlidar.LidarPropSampleRate, 9)
+        laser.setlidaropt(ydlidar.LidarPropSingleChannel, False)
+        laser.setlidaropt(ydlidar.LidarPropMaxAngle, 180.0)
+        laser.setlidaropt(ydlidar.LidarPropMinAngle, -180.0)
+        laser.setlidaropt(ydlidar.LidarPropMaxRange, 16.0)
+        laser.setlidaropt(ydlidar.LidarPropMinRange, 0.1)
+        laser.setlidaropt(ydlidar.LidarPropIntenstiy, False)
+
         ret = laser.initialize()
     except Exception as e:
         logging.error(f"ERROR initializing YDLidar: {e}")
