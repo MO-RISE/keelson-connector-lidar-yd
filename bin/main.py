@@ -111,7 +111,7 @@ if __name__ == "__main__":
     try:
         ret = laser.initialize()
     except Exception as e:
-        logging.error(f"Error initializing YDLidar: {e}")
+        logging.error(f"ERROR initializing YDLidar: {e}")
         laser.turnOff()
         laser.disconnecting()
         ret = False
