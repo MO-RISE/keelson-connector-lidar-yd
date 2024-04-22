@@ -1,3 +1,5 @@
+# Source: https://github.com/YDLIDAR/YDLidar-SDK/tree/master/python/examples
+
 import os
 import ydlidar
 import time

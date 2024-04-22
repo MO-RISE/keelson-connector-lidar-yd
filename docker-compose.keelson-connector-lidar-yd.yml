@@ -3,12 +3,12 @@ services:
 
   keelson-connector-lidar-yd:
     build: .
-    # image: ghcr.io/mo-rise/keelson-connector-mavlink:latest (To be used when not developing)
+    # image: ghcr.io/mo-rise/keelson-connector-lidar-yd:latest (Pull image from github registery)
     container_name: lidar-yd
     restart: unless-stopped
     network_mode: "host"
     privileged: true
     devices:
-      - "/dev/ttyACM0:/dev/ttyACM0"
-    command: "-r rise -e masslab --device-id /dev/ttyACM0 --log-level 10 -sub start"
+      - "/dev/ttyACM1:/dev/ttyACM1"
+    command: "-r rise -e boatswain --device-port /dev/ttyACM1 --log-level 10 "
     

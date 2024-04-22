@@ -1,3 +1,5 @@
+# Source: https://github.com/YDLIDAR/YDLidar-SDK/tree/master/python/examples
+
 import PyLidar3
 import logging
 import time
@@ -23,7 +25,7 @@ if(Obj.Connect()):
     
     while (time.time() - t) < 30: #scan for 30 seconds
         ingress_timestamp = time.time_ns()
-        scan_360 = next(gen) # Dict, {angle(degrees) : distance(millimeters), ...}
+        scan_360 = next(gen) # Output: Dict, {angle_degrees(key) : distance_millimeters(int), ...}
         logging.debug(f"scan_360: {scan_360}") 
         logging.debug(f"scan_360: {type(scan_360)}") 
         payload = LaserScan()
