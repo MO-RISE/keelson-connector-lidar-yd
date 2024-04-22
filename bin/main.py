@@ -108,7 +108,13 @@ if __name__ == "__main__":
     laser.setlidaropt(ydlidar.LidarPropMinRange, 0.1)
     laser.setlidaropt(ydlidar.LidarPropIntenstiy, False)
 
-    ret = laser.initialize()
+    try:
+        ret = laser.initialize()
+    except Exception as e:
+        logging.error(f"Error initializing YDLidar: {e}")
+        laser.turnOff()
+        laser.disconnecting()
+        ret = False
 
     try:
         if ret:
