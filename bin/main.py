@@ -173,8 +173,8 @@ if __name__ == "__main__":
                 if args.frame_id is not None:
                     payload.frame_id = args.frame_id
                 serialized_payload = payload.SerializeToString()
-                pub_point_cloud.put(envelope)
                 envelope = keelson.enclose(serialized_payload)
+                pub_point_cloud.put(envelope)
                 logging.debug("...published point cloud to zenoh!")
 
             else:
