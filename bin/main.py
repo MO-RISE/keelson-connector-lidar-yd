@@ -94,7 +94,7 @@ if __name__ == "__main__":
 
     laser = ydlidar.CYdLidar()
     logging.info(f"Conneted: {port}")
-    
+
     laser.setlidaropt(ydlidar.LidarPropSerialPort, port)
     laser.setlidaropt(ydlidar.LidarPropSerialBaudrate, 230400)
     laser.setlidaropt(ydlidar.LidarPropLidarType, ydlidar.TYPE_TRIANGLE)
@@ -191,7 +191,7 @@ if __name__ == "__main__":
         laser.disconnecting()
     
     except Exception as e:
-        logging.error(f"Error: {e}")
+        logging.error(f"Exept Error: {e}")
         laser.turnOff()
         laser.disconnecting()
 
