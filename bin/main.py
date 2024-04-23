@@ -19,7 +19,7 @@ from terminal_inputs import terminal_inputs
 from keelson.payloads.TimestampedFloat_pb2 import TimestampedFloat
 from keelson.payloads.TimestampedString_pb2 import TimestampedString
 from keelson.payloads.PointCloud_pb2 import PointCloud
-from keelson.payloads.Experimental_PointCloudSimplified_pb2 import Experimental_PointCloudSimplified
+from keelson.payloads.Experimental_PointCloudSimplified_pb2 import PointCloudSimplified
 from keelson.payloads.LaserScan_pb2 import LaserScan    
 
 # Global variable for Zenoh session
@@ -202,7 +202,7 @@ if __name__ == "__main__":
                     logging.debug("...published point cloud to zenoh!")
 
                     # Simplified Point Cloud Parsing and Publishing (Crowsnest)
-                    payload_simple = Experimental_PointCloudSimplified()
+                    payload_simple = PointCloudSimplified()
                     payload_simple.timestamp.FromNanoseconds(ingress_timestamp)
                     payload_simple.point_positions = relative_positions
                     serialized_payload_simple = payload_simple.SerializeToString()
