@@ -20,7 +20,7 @@ from keelson.payloads.TimestampedFloat_pb2 import TimestampedFloat
 from keelson.payloads.TimestampedString_pb2 import TimestampedString
 from keelson.payloads.PointCloud_pb2 import PointCloud
 from keelson.payloads.Experimental_PointCloudSimplified_pb2 import PointCloudSimplified 
-from keelson.payloads.RelPointsPosition_pb2 import RelPointsPosition
+from keelson.payloads.Experimental_PointCloudSimplified_pb2 import RelPointsPosition
 from keelson.payloads.LaserScan_pb2 import LaserScan    
 
 # Global variable for Zenoh session
