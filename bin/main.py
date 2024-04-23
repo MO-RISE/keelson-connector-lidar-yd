@@ -172,10 +172,10 @@ if __name__ == "__main__":
                         if point.range > 0: # Removing non returns (?)
                             x = point.range * math.cos(point.angle)
                             y = point.range * math.sin(point.angle)
-                            relative_positions.append([float(x), float(y), float(0)])
+                            relative_positions.append([x, y, 0])
 
                             protoMsg = RelPointsPosition()
-                            protoMsg.coordinates= [float(x), float(y), float(0)]
+                            protoMsg.coordinates = [float(x), float(y), float(0)]
                             simple_points.append(protoMsg)
                     
                     logging.debug(f"Points: {len(relative_positions)}")
