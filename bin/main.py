@@ -177,7 +177,7 @@ if __name__ == "__main__":
                             relative_positions.append([x, y, 0])
 
                             relpos = RelPointsPosition()
-                            relpos.coordinates = [float(x), float(y), float(0)]
+                            relpos.coordinates.extend( [float(x), float(y), float(0)])
                             simple_points.append(relpos)
                     
                     logging.debug(f"Points: {len(relative_positions)}")
@@ -212,7 +212,7 @@ if __name__ == "__main__":
                     # Simplified Point Cloud Parsing and Publishing (Crowsnest)
                     payload_simple = PointCloudSimplified()
                     payload_simple.timestamp.FromNanoseconds(ingress_timestamp)
-                    payload_simple.point_positions = simple_points
+                    payload_simple.point_positions.extend(simple_points)
                     serialized_payload_simple = payload_simple.SerializeToString()
                     envelope_simple = keelson.enclose(serialized_payload_simple)
                     pub_point_cloud_simple.put(envelope_simple)
