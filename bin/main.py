@@ -82,7 +82,7 @@ if __name__ == "__main__":
     pubkey_point_cloud_simple = keelson.construct_pub_sub_key(
         realm=args.realm,
         entity_id=args.entity_id,
-        subject="point_cloud",
+        subject="point_cloud_simplified",
         source_id="ydlidar",
     )
     pub_point_cloud_simple = session.declare_publisher(pubkey_point_cloud_simple)
