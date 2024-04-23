@@ -19,7 +19,7 @@ from terminal_inputs import terminal_inputs
 from keelson.payloads.TimestampedFloat_pb2 import TimestampedFloat
 from keelson.payloads.TimestampedString_pb2 import TimestampedString
 from keelson.payloads.PointCloud_pb2 import PointCloud
-from keelson.payloads.Experimental_PointCloudSimplified_pb2 import PointCloudSimplified
+from keelson.payloads.Experimental_PointCloudSimplified_pb2 import PointCloudSimplified, PointSimplified
 from keelson.payloads.LaserScan_pb2 import LaserScan    
 
 # Global variable for Zenoh session
@@ -167,14 +167,17 @@ if __name__ == "__main__":
                 
                     # Point Cloud Parsing and Publishing 
                     relative_positions = []
+                    simple_points = []
                     for point in scan.points:
                         if point.range > 0: # Removing non returns (?)
                             x = point.range * math.cos(point.angle)
                             y = point.range * math.sin(point.angle)
                             relative_positions.append([float(x), float(y), float(0)])
+                            simple_points.append(PointSimplified([float(x), float(y), float(0)]))
                     
                     logging.debug(f"Points: {len(relative_positions)}")
-                
+                    
+
                     np_relative_pos = np.array(relative_positions)
                     data = np_relative_pos.tobytes()
                     point_stride = len(data) / len(np_relative_pos)
@@ -204,7 +207,7 @@ if __name__ == "__main__":
                     # Simplified Point Cloud Parsing and Publishing (Crowsnest)
                     payload_simple = PointCloudSimplified()
                     payload_simple.timestamp.FromNanoseconds(ingress_timestamp)
-                    payload_simple.point_positions = relative_positions
+                    payload_simple.point_positions = simple_points
                     serialized_payload_simple = payload_simple.SerializeToString()
                     envelope_simple = keelson.enclose(serialized_payload_simple)
                     pub_point_cloud_simple.put(envelope_simple)
