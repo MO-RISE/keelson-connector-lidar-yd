@@ -173,7 +173,10 @@ if __name__ == "__main__":
                             x = point.range * math.cos(point.angle)
                             y = point.range * math.sin(point.angle)
                             relative_positions.append([float(x), float(y), float(0)])
-                            simple_points.append(RelPointsPosition([float(x), float(y), float(0)]))
+
+                            protoMsg = RelPointsPosition()
+                            protoMsg.coordinates= [float(x), float(y), float(0)]
+                            simple_points.append(protoMsg)
                     
                     logging.debug(f"Points: {len(relative_positions)}")
                     
