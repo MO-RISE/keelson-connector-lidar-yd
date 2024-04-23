@@ -19,6 +19,7 @@ from terminal_inputs import terminal_inputs
 from keelson.payloads.TimestampedFloat_pb2 import TimestampedFloat
 from keelson.payloads.TimestampedString_pb2 import TimestampedString
 from keelson.payloads.PointCloud_pb2 import PointCloud
+from keelson.payloads.Experimental_PointCloudSimplified_pb2 import Experimental_PointCloudSimplified
 from keelson.payloads.LaserScan_pb2 import LaserScan    
 
 # Global variable for Zenoh session
@@ -75,6 +76,17 @@ if __name__ == "__main__":
     )
     pub_point_cloud = session.declare_publisher(pubkey_point_cloud)
     logging.info(f"Decler up TELEMETRY publisher: {pubkey_point_cloud}")
+
+    # Point cloud Simplified publisher
+    pubkey_point_cloud_simple = keelson.construct_pub_sub_key(
+        realm=args.realm,
+        entity_id=args.entity_id,
+        subject="point_cloud",
+        source_id="ydlidar",
+    )
+    pub_point_cloud_simple = session.declare_publisher(pubkey_point_cloud_simple)
+    logging.info(f"Decler up TELEMETRY publisher: {pubkey_point_cloud_simple}")
+
 
     # -----------------------------
     # -----------------------------
@@ -188,6 +200,15 @@ if __name__ == "__main__":
                     envelope = keelson.enclose(serialized_payload)
                     pub_point_cloud.put(envelope)
                     logging.debug("...published point cloud to zenoh!")
+
+                    # Simplified Point Cloud Parsing and Publishing (Crowsnest)
+                    payload_simple = Experimental_PointCloudSimplified()
+                    payload_simple.timestamp.FromNanoseconds(ingress_timestamp)
+                    payload_simple.point_positions = relative_positions
+                    serialized_payload_simple = payload_simple.SerializeToString()
+                    envelope_simple = keelson.enclose(serialized_payload_simple)
+                    pub_point_cloud_simple.put(envelope_simple)
+                    logging.debug("...published point cloud SIMPLE to zenoh!")
 
                 else:
                     logging.debug("Failed to get Lidar Data")
