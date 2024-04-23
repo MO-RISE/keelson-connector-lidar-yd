@@ -19,7 +19,7 @@ from terminal_inputs import terminal_inputs
 from keelson.payloads.TimestampedFloat_pb2 import TimestampedFloat
 from keelson.payloads.TimestampedString_pb2 import TimestampedString
 from keelson.payloads.PointCloud_pb2 import PointCloud
-from keelson.payloads.Experimental_PointCloudSimplified_pb2 import PointCloudSimplified, PointSimplified
+from keelson.payloads.Experimental_PointCloudSimplified_pb2 import PointCloudSimplified, RelPointsPosition
 from keelson.payloads.LaserScan_pb2 import LaserScan    
 
 # Global variable for Zenoh session
@@ -173,7 +173,7 @@ if __name__ == "__main__":
                             x = point.range * math.cos(point.angle)
                             y = point.range * math.sin(point.angle)
                             relative_positions.append([float(x), float(y), float(0)])
-                            simple_points.append(PointSimplified([float(x), float(y), float(0)]))
+                            simple_points.append(RelPointsPosition([float(x), float(y), float(0)]))
                     
                     logging.debug(f"Points: {len(relative_positions)}")
                     
