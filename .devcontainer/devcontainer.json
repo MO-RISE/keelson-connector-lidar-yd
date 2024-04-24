@@ -9,6 +9,7 @@
 	},
 	"runArgs": [
 		"--network=host",
+		"--name=devcontainer-lidar-yd"
 		// "-v COM4:/dev/bus/usb/04"
 	],
 	// Features to add to the dev container. More info: https://containers.dev/features.

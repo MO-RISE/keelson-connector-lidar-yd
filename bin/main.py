@@ -19,9 +19,9 @@ from terminal_inputs import terminal_inputs
 from keelson.payloads.TimestampedFloat_pb2 import TimestampedFloat
 from keelson.payloads.TimestampedString_pb2 import TimestampedString
 from keelson.payloads.PointCloud_pb2 import PointCloud
-from keelson.payloads.Experimental_PointCloudSimplified_pb2 import PointCloudSimplified 
+from keelson.payloads.Experimental_PointCloudSimplified_pb2 import PointCloudSimplified
 from keelson.payloads.Experimental_PointCloudSimplified_pb2 import RelPointsPosition
-from keelson.payloads.LaserScan_pb2 import LaserScan    
+from keelson.payloads.LaserScan_pb2 import LaserScan
 
 # Global variable for Zenoh session
 session = None
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     # INITIALIZATION PUBLISHERS
     # -----------------------------
 
-    # Scan publisher 
+    # Scan publisher
     pubkey_scan = keelson.construct_pub_sub_key(
         realm=args.realm,
         entity_id=args.entity_id,
@@ -88,7 +88,6 @@ if __name__ == "__main__":
     pub_point_cloud_simple = session.declare_publisher(pubkey_point_cloud_simple)
     logging.info(f"Decler up TELEMETRY publisher: {pubkey_point_cloud_simple}")
 
-
     # -----------------------------
     # -----------------------------
 
@@ -100,9 +99,6 @@ if __name__ == "__main__":
     ports = ydlidar.lidarPortList()
     port = args.device_port
 
-    # for key, value in ports.items():
-    #     port = value
-    
     logging.info(f"Conneting on port: {port}")
 
     laser = ydlidar.CYdLidar()
@@ -121,9 +117,9 @@ if __name__ == "__main__":
         laser.setlidaropt(ydlidar.LidarPropMaxRange, 16.0)
         laser.setlidaropt(ydlidar.LidarPropMinRange, 0.1)
         laser.setlidaropt(ydlidar.LidarPropIntenstiy, False)
-        
+
         ret = laser.initialize()
-        logging.info(f"HERE")
+   
     except Exception as e:
         logging.error(f"ERROR initializing YDLidar: {e}")
         laser.turnOff()
@@ -146,42 +142,22 @@ if __name__ == "__main__":
                         f"Scan received[{scan.stamp}]:{scan.points.size()} ranges is [{scan.config.scan_time*100}]Hz"
                     )
 
-                    # TODO: Laser scan Parsing and Publishing 
-                    # readings = []
-                    # for point in scan.points:
-                    #     readings.append([point.angle, point.range])
-
-                    # logging.debug(f"Readings: {len(readings)}")
-                    # data = relative_positions.tobytes() ERROR 
-                    # payload = LaserScan()
-                    # payload.timestamp.FromNanoseconds(ingress_timestamp)
-                    # payload.start_angle = 0 # Bearing of first point, in radians
-                    # payload.start_angle = 6.26573 # Bearing of last point, in radians
-                    # payload.ranges.extend(ranges_arr_float) 
-                    # payload.pose.position.x = 0
-                    # payload.pose.position.y = 0
-                    # payload.pose.position.z = 0
-                    # serialized_payload = payload.SerializeToString()
-                    # envelope = keelson.enclose(serialized_payload)
-                    # pub_scan.put(envelope)
-                        
-                
-                    # Point Cloud Parsing and Publishing 
+                    # Point Cloud Parsing and Publishing
                     relative_positions = []
                     simple_points = []
-                    
-                    for point in scan.points:
-                        if point.range > 0: # Removing non returns (?)
-                            x = point.range * math.cos(point.angle)
-                            y = point.range * math.sin(point.angle)
+
+                    for point in scan.points: # Point range in meters and angle in radians
+                        if point.range > 0:  
+                            # Rounding to millimeters
+                            x = round(point.range * math.sin(point.angle),4)
+                            y = round(point.range * math.cos(point.angle),4)
                             relative_positions.append([x, y, 0])
 
                             relpos = RelPointsPosition()
-                            relpos.coordinates.extend( [float(x), float(y), float(0)])
+                            relpos.coordinates.extend([float(x), float(y), float(0)])
                             simple_points.append(relpos)
-                    
+
                     logging.debug(f"Points: {len(relative_positions)}")
-                    
 
                     np_relative_pos = np.array(relative_positions)
 
@@ -189,7 +165,7 @@ if __name__ == "__main__":
 
                     data = np_relative_pos.tobytes()
                     point_stride = len(data) / len(np_relative_pos)
-                
+
                     payload = PointCloud()
                     payload.point_stride = int(point_stride)
                     payload.data = data
@@ -197,7 +173,7 @@ if __name__ == "__main__":
                     payload.pose.position.x = 0
                     payload.pose.position.y = 0
                     payload.pose.position.z = 0
-                    payload.pose.orientation.x = 0.0  
+                    payload.pose.orientation.x = 0.0
                     payload.pose.orientation.y = 0.0
                     payload.pose.orientation.z = 0.0
                     payload.pose.orientation.w = 1.0
@@ -228,7 +204,7 @@ if __name__ == "__main__":
             laser.turnOff()
 
         laser.disconnecting()
-    
+
     except Exception as e:
         logging.error(f"Exept Error: {e}")
         laser.turnOff()

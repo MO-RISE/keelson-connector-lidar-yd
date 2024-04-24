@@ -2,6 +2,8 @@
 
 YD Lidar connector to Keelson. Publishing point clouds to the keelson network.  
 
+**OBS! To run the scipt on other systems then linux-x86 you need to build your own python installable package of ydlindar.**
+
 Supported and tested sensor types:
 
 - G4 (Budrate: 230400 SampleRate: 9/8/4)
@@ -9,7 +11,7 @@ Supported and tested sensor types:
   - [User Manual](https://www.ydlidar.com/Public/upload/files/2022-06-21/YDLIDAR%20G4%20Lidar%20User%20Manual%20V1.3(220411).pdf)
   - [Data Sheet](https://www.ydlidar.com/Public/upload/files/2022-06-21/YDLIDAR%20G4%20Data%20sheet%20V2.0(220411).pdf)
 
-## Python SDK
+## Python SDKs used
 
 [YDLidar-SDK](https://github.com/YDLIDAR/YDLidar-SDK/tree/master) Wheel package built from repo
 
@@ -18,6 +20,10 @@ Supported and tested sensor types:
 
 
 ## Run main.py start script examle
+
+1) Creat an virtual enviroment 
+2) Install packages
+3) Start main.py with following example argumnents 
 
 ```bash
 # Simple 
