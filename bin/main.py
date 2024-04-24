@@ -184,6 +184,9 @@ if __name__ == "__main__":
                     
 
                     np_relative_pos = np.array(relative_positions)
+
+                    logging.debug(np_relative_pos.dtype)
+
                     data = np_relative_pos.tobytes()
                     point_stride = len(data) / len(np_relative_pos)
                 
