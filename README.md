@@ -31,6 +31,11 @@ python bin/main.py -r rise -e boatswain --log-level 10
 
 # Extended settings 
 python bin/main.py -r rise -e boatswain --device-port /dev/ttyACM1 --log-level 10 
+
+
+# Experimental
+python bin/main.py -r rise -e boatswain --device-port /dev/ttyACM1 --log-level 10 
+
 ```
 
 ## Docker compose example 
